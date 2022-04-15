@@ -9,17 +9,16 @@ jobs:
     runs-on: ubuntu-latest
     env:
       REPO: tolgatakir/sample-container-todo-app-java-maven
-
     steps:
       - uses: actions/checkout@v2
-      - name: Cache Maven packages
-        uses: actions/cache@v2
+      - name: Set up JDK 8
+        uses: actions/setup-java@v2
         with:
-          path: ~/.m2
-          key: ${{ runner.os }}-m2-${{ hashFiles('pom.xml') }}
-          restore-keys: ${{ runner.os }}-m2
+          java-version: 8
+          distribution: 'adopt'
+          cache: 'maven'
       - name: Create artifact
-        run: mvn -B clean package -DskipTests
+        run: ./mvnw -B clean package -DskipTests
       - name: Login to Docker Hub
         run: docker login -u tolgatakir -p ${{ secrets.DOCKERHUB_PASSWORD }}
       - name: Build Docker image

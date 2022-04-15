@@ -2,21 +2,26 @@ name: CI for sample-container-todo-app-java-maven
 
 on:
   push:
-    branches: [master]
+    branches: [main]
   pull_request:
-    branches: [master]
+    branches: [main]
   workflow_dispatch:
 
 jobs:
   build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        jdk: [8, 11, 16]
     name: Build
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
-      - name: Set up JDK 8
+      - name: Set up JDK
         uses: actions/setup-java@v2
         with:
-          java-version: 8
+          java-version: ${{ matrix.jdk }}
+          distribution: 'adopt'
           cache: 'maven'
       - name: Build with Maven
         run: ./mvnw clean install
