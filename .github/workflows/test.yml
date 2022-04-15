@@ -1,4 +1,4 @@
-name: Build for sample-container-todo-app-java-maven
+name: Test for sample-container-todo-app-java-maven
 
 on:
   push:
@@ -11,7 +11,7 @@ jobs:
   build:
     strategy:
       matrix:
-        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        os: [ ubuntu-latest ]
         jdk: [ 8, 11, 16 ]
     name: Build
     runs-on: ${{ matrix.os }}
@@ -24,4 +24,9 @@ jobs:
           distribution: 'adopt'
           cache: 'maven'
       - name: Build with Maven
-        run: ./mvnw clean install -DskipTests
+        run: ./mvnw clean install
+      - name: Archive test results
+        uses: actions/upload-artifact@v2
+        with:
+          name: test-result-junit
+          path: target/surefire-reports/
