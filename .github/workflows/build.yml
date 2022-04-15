@@ -1,4 +1,4 @@
-name: Maven Test
+name: CI for sample-container-todo-app-java-maven
 
 on:
   push:
