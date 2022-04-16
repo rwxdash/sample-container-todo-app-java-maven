@@ -8,12 +8,12 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  test:
     strategy:
       matrix:
         os: [ ubuntu-latest ]
         jdk: [ 8, 11, 16 ]
-    name: Build
+    name: Run Tests
     runs-on: ${{ matrix.os }}
     steps:
       - uses: actions/checkout@v2
@@ -23,9 +23,9 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'adopt'
           cache: 'maven'
-      - name: Build with Maven
-        run: ./mvnw clean install
-      - name: Archive test results
+      - name: Run Tests with Maven
+        run: ./mvnw clean test
+      - name: Archive Test Results
         uses: actions/upload-artifact@v2
         with:
           name: test-result-junit

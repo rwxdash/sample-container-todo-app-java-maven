@@ -4,7 +4,7 @@ on:
   workflow_dispatch:
 
 jobs:
-  docker:
+  release:
     name: Publish - Docker Hub
     runs-on: ubuntu-latest
     env:
@@ -20,8 +20,8 @@ jobs:
       - name: Create artifact
         run: ./mvnw -B clean package -DskipTests
       - name: Login to Docker Hub
-        run: docker login -u tolgatakir -p ${{ secrets.DOCKERHUB_PASSWORD }}
-      - name: Build Docker image
+        run: docker login -u ${{ secrets.DOCKERHUB_USERNAME }} -p ${{ secrets.DOCKERHUB_PASSWORD }}
+      - name: Build Docker Image
         run: docker build -t $REPO:latest -t $REPO:${GITHUB_SHA::8} .
-      - name: Publish Docker image
+      - name: Publish Docker Image
         run: docker push $REPO -a
