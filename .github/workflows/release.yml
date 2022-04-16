@@ -2,6 +2,7 @@ name: Release sample-container-todo-app-java-maven to Docker Hub
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   release:
