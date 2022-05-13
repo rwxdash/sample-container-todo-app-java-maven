@@ -23,6 +23,7 @@ jobs:
       - name: Dump matrix context
         run: echo '${{ toJSON(matrix) }}'
       - uses: hmarr/debug-action@v2
+      - uses: actions/checkout@v2
       - uses: actions-ecosystem/action-add-labels@v1
         with:
           labels: tolga
