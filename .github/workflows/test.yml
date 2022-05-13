@@ -31,6 +31,8 @@ jobs:
         with:
           name: test-result-junit
           path: target/surefire-reports/
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
       - name: "Get this job's run ID"
         id: get-job-id
         uses: actions/github-script@v6
@@ -46,7 +48,7 @@ jobs:
               run_id: context.runId,
             });
             console.log(result)
-            const index = "${{strategy.job-index}}"
+            const index = ${{strategy.job-index}}
             console.log('JOB_INDEX'+index)
             console.log(result.data.jobs[index])
             // Filter for "self".

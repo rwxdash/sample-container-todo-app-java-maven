@@ -30,7 +30,7 @@ jobs:
               run_id: context.runId,
             });
             console.log(result)
-            const index = "${{strategy.job-index}}"
+            const index = ${{strategy.job-index}}
             console.log('JOB_INDEX'+index)
             console.log(result.data.jobs[index])
             // Filter for "self".
