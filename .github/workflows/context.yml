@@ -33,8 +33,10 @@ jobs:
             // Filter for "self".
             // Note: have to use hardcoded value for name, because:
             //  * the key in yaml ('build:') is not available in this data
-            //  * the name of current job is not available in github/jobs context            
-            return result.data.jobs.filter(it => it.status === 'in_progress' && it.name === '🔨 Build')[0].id
+            //  * the name of current job is not available in github/jobs context  
+            const jobName = "${{jobs.get-job-id.name}}"
+            console.log(jobName)
+            return result.data.jobs.filter(it => it.status === 'in_progress' && it.name === jobName)[0].id
 
       - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
         run: >
