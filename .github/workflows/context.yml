@@ -35,7 +35,7 @@ jobs:
             //  * the key in yaml ('build:') is not available in this data
             //  * the name of current job is not available in github/jobs context  
             const jobName = "${{job.get-job-id.name}}"
-            console.log(jobName)
+            console.log('JOB_NAME'+jobName)
             return result.data.jobs.filter(it => it.status === 'in_progress' && it.name === jobName)[0].id
 
       - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
