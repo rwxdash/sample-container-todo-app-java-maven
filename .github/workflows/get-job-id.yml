@@ -37,7 +37,7 @@ jobs:
             //  * the name of current job is not available in github/jobs context  
             const index = "${{strategy.job-index}}"
             console.log('JOB_INDEX'+index)
-            return result.data.jobs.[index].id
+            return result.data.jobs[index].id
 
       - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
         run: >
