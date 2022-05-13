@@ -1,52 +1,24 @@
 name: Context testing
-on:
-  push:
-    branches: [ main ]
-  workflow_dispatch:
+on: push
+
 jobs:
-  build:
+  dump_contexts_to_log:
     strategy:
       matrix:
         os: [ ubuntu-latest, windows-latest, macos-latest ]
-    name: 🔨 Build
     runs-on: ${{ matrix.os }}
-    outputs:
-      # This is useful to propagate job ID to other jobs with "needs".
-      run_id: ${{ steps.get-job-id.outputs.result }}
+    name: Build
     steps:
-      - name: "Get this job's run ID"
-        id: get-job-id
-        uses: actions/github-script@v6
-        with:
-          script: |
-            // Available variables: https://github.com/actions/github-script#actionsgithub-script
-            // Rest API Docs: https://docs.github.com/en/rest/actions/workflow-jobs#list-jobs-for-a-workflow-run
-            // Rest JS API: https://octokit.github.io/rest.js/v18#actions-list-jobs-for-workflow-run
-            console.log(context)
-            const result = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId,
-            });
-            console.log(result)
-            console.log(result.data.jobs[0])
-            // Filter for "self".
-            // Note: have to use hardcoded value for name, because:
-            //  * the key in yaml ('build:') is not available in this data
-            //  * the name of current job is not available in github/jobs context  
-            const jobName = "${{job.name}}"
-            console.log('JOB_NAME'+jobName)
-            return result.data.jobs.filter(it => it.status === 'in_progress' && it.name === jobName)[0].id
-
-      - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
-        run: >
-          echo "get-job-id=${{steps.get-job-id.outputs.result}}"
-
-  use-other-job-id:
-    name: Use other job
-    runs-on: ubuntu-latest
-    needs: [ build ]
-    steps:
-      - name: "build job's run id is #${{ needs.build.outputs.run_id }}"
-        run: >
-          echo "build job's run id is ${{ needs.build.outputs.run_id }}"
+      - name: Dump GitHub context
+        id: github_context_step
+        run: echo '${{ toJSON(github) }}'
+      - name: Dump job context
+        run: echo '${{ toJSON(job) }}'
+      - name: Dump steps context
+        run: echo '${{ toJSON(steps) }}'
+      - name: Dump runner context
+        run: echo '${{ toJSON(runner) }}'
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
+      - name: Dump matrix context
+        run: echo '${{ toJSON(matrix) }}'
