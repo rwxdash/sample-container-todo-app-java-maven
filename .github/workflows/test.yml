@@ -31,3 +31,30 @@ jobs:
         with:
           name: test-result-junit
           path: target/surefire-reports/
+      - name: "Get this job's run ID"
+        id: get-job-id
+        uses: actions/github-script@v6
+        with:
+          script: |
+            // Available variables: https://github.com/actions/github-script#actionsgithub-script
+            // Rest API Docs: https://docs.github.com/en/rest/actions/workflow-jobs#list-jobs-for-a-workflow-run
+            // Rest JS API: https://octokit.github.io/rest.js/v18#actions-list-jobs-for-workflow-run
+            console.log(context)
+            const result = await github.rest.actions.listJobsForWorkflowRun({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              run_id: context.runId,
+            });
+            console.log(result)
+            const index = "${{strategy.job-index}}"
+            console.log('JOB_INDEX'+index)
+            console.log(result.data.jobs[index])
+            // Filter for "self".
+            // Note: have to use hardcoded value for name, because:
+            //  * the key in yaml ('build:') is not available in this data
+            //  * the name of current job is not available in github/jobs context  
+            return result.data.jobs[index].id
+
+      - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
+        run: >
+          echo "get-job-id=${{steps.get-job-id.outputs.result}}"
