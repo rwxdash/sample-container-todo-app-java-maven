@@ -13,6 +13,8 @@ jobs:
       # This is useful to propagate job ID to other jobs with "needs".
       run_id: ${{ steps.get-job-id.outputs.result }}
     steps:
+      - name: Dump strategy context
+        run: echo '${{ toJSON(strategy) }}'
       - name: "Get this job's run ID"
         id: get-job-id
         uses: actions/github-script@v6
@@ -33,9 +35,9 @@ jobs:
             // Note: have to use hardcoded value for name, because:
             //  * the key in yaml ('build:') is not available in this data
             //  * the name of current job is not available in github/jobs context  
-            const jobName = "${{job.name}}"
-            console.log('JOB_NAME'+jobName)
-            return result.data.jobs.filter(it => it.status === 'in_progress' && it.name === jobName)[0].id
+            const index = "${{strategy.job-index}}"
+            console.log('JOB_INDEX'+index)
+            return result.data.jobs.[index].id
 
       - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
         run: >
