@@ -6,16 +6,9 @@ on:
 jobs:
   build:
     strategy:
-      fail-fast: false
       matrix:
-        os: [ [ self-hosted, jdk8 ], [ self-hosted, jdk11 ] ]
+        os: [ 'self-hosted', 'macOS', 'X64' ]
         order: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-        required: [ required ]
-        include:
-          - { os: macos-10.15, required: required, jdk: 8 }
-          - { os: macos-10.15, required: optional, jdk: 11 }
-          - { os: windows-2019, required: required, jdk: 8 }
-          - { os: windows-2019, required: optional, jdk: 11 }
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Get this job's run ID"
@@ -57,16 +50,9 @@ jobs:
 
   build2:
     strategy:
-      fail-fast: false
       matrix:
-        os: [ [ self-hosted, jdk8 ], [ self-hosted, jdk11 ] ]
+        os: [ 'self-hosted', 'macOS', 'X64' ]
         order: [ 1, 2, 3, 4, 5, 6, 7, 8, 9 ]
-        required: [ required ]
-        include:
-          - { os: macos-10.15, required: required, jdk: 8 }
-          - { os: macos-10.15, required: optional, jdk: 11 }
-          - { os: windows-2019, required: required, jdk: 8 }
-          - { os: windows-2019, required: optional, jdk: 11 }
     runs-on: ${{ matrix.os }}
     steps:
       - name: "Get this job's run ID"
