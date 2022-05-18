@@ -31,32 +31,39 @@ jobs:
         with:
           name: test-result-junit
           path: target/surefire-reports/
-      - name: Dump strategy context
-        run: echo '${{ toJSON(strategy) }}'
       - name: "Get this job's run ID"
         id: get-job-id
         uses: actions/github-script@v6
         with:
           script: |
-            // Available variables: https://github.com/actions/github-script#actionsgithub-script
-            // Rest API Docs: https://docs.github.com/en/rest/actions/workflow-jobs#list-jobs-for-a-workflow-run
-            // Rest JS API: https://octokit.github.io/rest.js/v18#actions-list-jobs-for-workflow-run
-            console.log(context)
-            const result = await github.rest.actions.listJobsForWorkflowRun({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              run_id: context.runId,
-            });
-            console.log(result)
-            const index = ${{strategy.job-index}}
-            console.log('JOB_INDEX'+index)
-            console.log(result.data.jobs[index])
-            // Filter for "self".
-            // Note: have to use hardcoded value for name, because:
-            //  * the key in yaml ('build:') is not available in this data
-            //  * the name of current job is not available in github/jobs context  
-            return result.data.jobs[index].id
-
-      - name: "My job ID is ${{steps.get-job-id.outputs.result}}, but also echoing it to it's usable from scripts!"
+            const getJobId = async() => {
+              const result = await github.rest.actions.listJobsForWorkflowRun({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                run_id: context.runId,
+                per_page: 100,
+              });
+              const currentJobs = result.data.jobs.
+                filter(it => it.status === 'in_progress' && it.runner_name === process.env.RUNNER_NAME);
+              if (currentJobs && currentJobs.length) {
+                return currentJobs[0].id;
+              }
+              return null;
+            }
+            for (let i = 0; i < 10; i++) {
+              const currentJobId = await getJobId();
+              if (currentJobId) {
+                console.log("Current job id:", currentJobId);
+                return currentJobId;
+              }
+              await new Promise(r => setTimeout(r, 1000));
+            }
+      - name: "My job ID is ${{steps.get-job-id.outputs.result}}"
         run: >
           echo "get-job-id=${{steps.get-job-id.outputs.result}}"
+      - name: "Runner name"
+        id: runner-name
+        uses: actions/github-script@v6
+        with:
+          script: |
+            console.log(process.env.RUNNER_NAME)
