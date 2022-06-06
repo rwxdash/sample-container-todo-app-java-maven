@@ -1,0 +1,25 @@
+name: List App Installation
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: "Get this account all app installation"
+        id: list-installations
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const listInstallations = async() => {
+              return await github.rest.apps.listInstallationsForAuthenticatedUser();
+            }
+            const installations = await listInstallations();
+            if (installations) {
+              console.log("All Installation:", JSON.parse(installations));
+              return currentJobId;
+            }
