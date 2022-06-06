@@ -23,6 +23,8 @@ jobs:
           java-version: 8
           distribution: 'adopt'
           cache: 'maven'
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@v1
       - name: Create Artifact
         run: ./mvnw -B clean package -DskipTests
       - name: Login to Docker Hub

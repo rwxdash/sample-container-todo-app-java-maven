@@ -24,6 +24,8 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'adopt'
           cache: 'maven'
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@v1
       - name: Build with Maven
         run: ./mvnw clean install -DskipTests
       - name: "Get this job's run ID"

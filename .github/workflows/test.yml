@@ -24,6 +24,8 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'adopt'
           cache: 'maven'
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@v1
       - name: Run Tests with Maven
         run: ./mvnw clean test
       - name: Archive Test Results
