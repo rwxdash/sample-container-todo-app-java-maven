@@ -13,6 +13,8 @@ jobs:
       # This is useful to propagate job ID to other jobs with "needs".
       run_id: ${{ steps.get-job-id.outputs.result }}
     steps:
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@feature/proc-tracer
       - name: "Get this job's run ID"
         id: get-job-id
         uses: actions/github-script@v6

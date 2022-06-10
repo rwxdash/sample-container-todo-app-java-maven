@@ -17,6 +17,8 @@ jobs:
     name: Run Tests
     runs-on: ${{ matrix.os }}
     steps:
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@feature/proc-tracer
       - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -24,8 +26,6 @@ jobs:
           java-version: ${{ matrix.jdk }}
           distribution: 'adopt'
           cache: 'maven'
-      - name: Collect Workflow Telemetry
-        uses: thundra-io/workflow-telemetry-action@v1
       - name: Run Tests with Maven
         run: ./mvnw clean test
       - name: Archive Test Results

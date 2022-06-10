@@ -9,6 +9,8 @@ jobs:
     runs-on: ${{ matrix.os }}
     name: Build
     steps:
+      - name: Collect Workflow Telemetry
+        uses: thundra-io/workflow-telemetry-action@feature/proc-tracer
       - name: Dump GitHub context
         id: github_context_step
         run: echo '${{ toJSON(github) }}'
