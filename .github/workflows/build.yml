@@ -7,7 +7,11 @@ on:
     branches: [ main ]
   workflow_dispatch:
   workflow_call:
-
+    secrets:
+      THUNDRA_APIKEY:
+        required: true
+env:
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
 jobs:
   build:
     strategy:
@@ -17,8 +21,10 @@ jobs:
     name: Build
     runs-on: ${{ matrix.os }}
     steps:
-      - name: Collect Workflow Telemetry
-        uses: thundra-io/workflow-telemetry-action@feature/proc-tracer
+      - name: Foresight Workflow Kit Action
+        uses: runforesight/foresight-workflow-kit-action@v1.0.0-beta
+        with:
+          api_key: ${{ secrets.THUNDRA_APIKEY }}
       - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -28,39 +34,3 @@ jobs:
           cache: 'maven'
       - name: Build with Maven
         run: ./mvnw clean install -DskipTests
-      - name: "Get this job's run ID"
-        id: get-job-id
-        uses: actions/github-script@v6
-        with:
-          script: |
-            const getJobId = async() => {
-              const result = await github.rest.actions.listJobsForWorkflowRun({
-                owner: context.repo.owner,
-                repo: context.repo.repo,
-                run_id: context.runId,
-                per_page: 100,
-              });
-              const currentJobs = result.data.jobs.
-                filter(it => it.status === 'in_progress' && it.runner_name === process.env.RUNNER_NAME);
-              if (currentJobs && currentJobs.length) {
-                return currentJobs[0].id;
-              }
-              return null;
-            }
-            for (let i = 0; i < 10; i++) {
-              const currentJobId = await getJobId();
-              if (currentJobId) {
-                console.log("Current job id:", currentJobId);
-                return currentJobId;
-              }
-              await new Promise(r => setTimeout(r, 1000));
-            }
-      - name: "My job ID is ${{steps.get-job-id.outputs.result}}"
-        run: >
-          echo "get-job-id=${{steps.get-job-id.outputs.result}}"
-      - name: "Runner name"
-        id: runner-name
-        uses: actions/github-script@v6
-        with:
-          script: |
-            console.log(process.env.RUNNER_NAME)

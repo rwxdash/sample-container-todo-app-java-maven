@@ -10,12 +10,19 @@ on:
 jobs:
   build:
     uses: ./.github/workflows/build.yml
+    secrets:
+      THUNDRA_APIKEY: ${{ secrets.THUNDRA_APIKEY }}
   test:
     uses: ./.github/workflows/test.yml
+    secrets:
+      THUNDRA_APIKEY: ${{ secrets.THUNDRA_APIKEY }}
+      THUNDRA_REGISTRY: ${{ secrets.THUNDRA_REGISTRY }}
+      THUNDRA_REGISTRY_AUTH: ${{ secrets.THUNDRA_REGISTRY_AUTH }}
     needs: build
   release:
     uses: ./.github/workflows/release.yml
     secrets:
+      THUNDRA_APIKEY: ${{ secrets.THUNDRA_APIKEY }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
       DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
     needs: test
