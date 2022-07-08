@@ -22,7 +22,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Foresight Workflow Kit Action
-        uses: runforesight/foresight-workflow-kit-action@v1.0.0-beta
+        uses: runforesight/foresight-workflow-kit-action@windows-path-fix
         with:
           api_key: ${{ secrets.THUNDRA_APIKEY }}
       - uses: actions/checkout@v2
