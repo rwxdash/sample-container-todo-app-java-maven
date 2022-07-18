@@ -15,8 +15,8 @@ on:
       THUNDRA_REGISTRY_AUTH:
         required: true
 env:
-  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.thundra.me
-  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
+  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.thundra.us
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.us
 jobs:
   test:
     strategy:
