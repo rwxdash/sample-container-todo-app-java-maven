@@ -9,18 +9,18 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/prod/build.yml
+    uses: ./.github/workflows/prod-build.yml
     secrets:
       THUNDRA_PROD_APIKEY: ${{ secrets.THUNDRA_PROD_APIKEY }}
   test:
-    uses: ./.github/workflows/prod/test.yml
+    uses: ./.github/workflows/prod-test.yml
     secrets:
       THUNDRA_PROD_APIKEY: ${{ secrets.THUNDRA_PROD_APIKEY }}
       THUNDRA_REGISTRY: ${{ secrets.THUNDRA_REGISTRY }}
       THUNDRA_REGISTRY_AUTH: ${{ secrets.THUNDRA_REGISTRY_AUTH }}
     needs: build
   release:
-    uses: ./.github/workflows/prod/release.yml
+    uses: ./.github/workflows/prod-release.yml
     secrets:
       THUNDRA_PROD_APIKEY: ${{ secrets.THUNDRA_PROD_APIKEY }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}

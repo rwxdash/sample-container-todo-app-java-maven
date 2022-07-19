@@ -9,18 +9,18 @@ on:
 
 jobs:
   build:
-    uses: ./.github/workflows/build.yml
+    uses: ./.github/workflows/staging-build.yml
     secrets:
       THUNDRA_STAGING_APIKEY: ${{ secrets.THUNDRA_STAGING_APIKEY }}
   test:
-    uses: ./.github/workflows/test.yml
+    uses: ./.github/workflows/staging-test.yml
     secrets:
       THUNDRA_STAGING_APIKEY: ${{ secrets.THUNDRA_STAGING_APIKEY }}
       THUNDRA_REGISTRY: ${{ secrets.THUNDRA_REGISTRY }}
       THUNDRA_REGISTRY_AUTH: ${{ secrets.THUNDRA_REGISTRY_AUTH }}
     needs: build
   release:
-    uses: ./.github/workflows/release.yml
+    uses: ./.github/workflows/staging-release.yml
     secrets:
       THUNDRA_STAGING_APIKEY: ${{ secrets.THUNDRA_STAGING_APIKEY }}
       DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
