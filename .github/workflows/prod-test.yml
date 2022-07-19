@@ -10,11 +10,6 @@ on:
     secrets:
       THUNDRA_PROD_APIKEY:
         required: true
-      THUNDRA_REGISTRY:
-        required: true
-      THUNDRA_REGISTRY_AUTH:
-        required: true
-
 jobs:
   test:
     strategy:
