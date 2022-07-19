@@ -1,0 +1,47 @@
+name: Test for sample-container-todo-app-java-maven
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      THUNDRA_PROD_APIKEY:
+        required: true
+      THUNDRA_REGISTRY:
+        required: true
+      THUNDRA_REGISTRY_AUTH:
+        required: true
+
+jobs:
+  test:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest ]
+        jdk: [ 8, 11, 16 ]
+    name: Run Tests
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Foresight Workflow Kit Action
+        uses: runforesight/foresight-workflow-kit-action@v1
+        with:
+          api_key: ${{ secrets.THUNDRA_PROD_APIKEY }}
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: 'adopt'
+          cache: 'maven'
+      - name: Run Tests with Maven
+        run: ./mvnw clean test
+      - name: Foresight Test Kit Action
+        uses: runforesight/foresight-test-kit-action@v1
+        with:
+          api_key: ${{ secrets.THUNDRA_PROD_APIKEY }}
+          test_framework: junit
+          test_path: target/surefire-reports/**
+          coverage_format: jacoco/xml
+          coverage_path: target/site/jacoco/*.xml

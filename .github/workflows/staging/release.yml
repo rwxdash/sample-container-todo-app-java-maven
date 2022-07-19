@@ -1,4 +1,4 @@
-name: Release sample-container-todo-app-java-maven to Docker Hub
+name: Release sample-container-todo-app-java-maven to Docker Hub for staging
 
 on:
   workflow_dispatch:
@@ -8,10 +8,10 @@ on:
         required: true
       DOCKERHUB_PASSWORD:
         required: true
-      THUNDRA_APIKEY:
+      THUNDRA_STAGING_APIKEY:
         required: true
 env:
-  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.us
 jobs:
   release:
     name: Publish - Docker Hub
@@ -20,9 +20,9 @@ jobs:
       REPO: tolgatakir/sample-container-todo-app-java-maven
     steps:
       - name: Foresight Workflow Kit Action
-        uses: runforesight/foresight-workflow-kit-action@v1.0.0-beta
+        uses: runforesight/foresight-workflow-kit-action@v1
         with:
-          api_key: ${{ secrets.THUNDRA_APIKEY }}
+          api_key: ${{ secrets.THUNDRA_STAGING_APIKEY }}
       - uses: actions/checkout@v2
       - name: Set up JDK 8
         uses: actions/setup-java@v2

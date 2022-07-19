@@ -1,4 +1,4 @@
-name: Test for sample-container-todo-app-java-maven
+name: Test for sample-container-todo-app-java-maven for staging
 
 on:
   push:
@@ -15,8 +15,8 @@ on:
       THUNDRA_REGISTRY_AUTH:
         required: true
 env:
-  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.thundra.me
-  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
+  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.thundra.us
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.us
 jobs:
   test:
     strategy:
@@ -27,9 +27,9 @@ jobs:
     runs-on: ${{ matrix.os }}
     steps:
       - name: Foresight Workflow Kit Action
-        uses: runforesight/foresight-workflow-kit-action@v1.0.0-beta
+        uses: runforesight/foresight-workflow-kit-action@v1
         with:
-          api_key: ${{ secrets.THUNDRA_APIKEY }}
+          api_key: ${{ secrets.THUNDRA_STAGING_APIKEY }}
       - uses: actions/checkout@v2
       - name: Set up JDK
         uses: actions/setup-java@v2
@@ -44,9 +44,9 @@ jobs:
           npm config set registry ${{ secrets.THUNDRA_REGISTRY }}
           npm config set _auth ${{ secrets.THUNDRA_REGISTRY_AUTH }}
       - name: Foresight Test Kit Action
-        uses: runforesight/foresight-test-kit-action@v1.0.0-beta
+        uses: runforesight/foresight-test-kit-action@v1
         with:
-          api_key: ${{ secrets.THUNDRA_APIKEY }}
+          api_key: ${{ secrets.THUNDRA_STAGING_APIKEY }}
           test_framework: junit
           test_path: target/surefire-reports/**
           coverage_format: jacoco/xml

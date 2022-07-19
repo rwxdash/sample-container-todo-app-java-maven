@@ -1,0 +1,28 @@
+name: CI for sample-container-todo-app-java-maven for lab
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/lab/build.yml
+    secrets:
+      THUNDRA_LAB_APIKEY: ${{ secrets.THUNDRA_LAB_APIKEY }}
+  test:
+    uses: ./.github/workflows/lab/test.yml
+    secrets:
+      THUNDRA_LAB_APIKEY: ${{ secrets.THUNDRA_LAB_APIKEY }}
+      THUNDRA_REGISTRY: ${{ secrets.THUNDRA_REGISTRY }}
+      THUNDRA_REGISTRY_AUTH: ${{ secrets.THUNDRA_REGISTRY_AUTH }}
+    needs: build
+  release:
+    uses: ./.github/workflows/lab/release.yml
+    secrets:
+      THUNDRA_LAB_APIKEY: ${{ secrets.THUNDRA_LAB_APIKEY }}
+      DOCKERHUB_USERNAME: ${{ secrets.DOCKERHUB_USERNAME }}
+      DOCKERHUB_PASSWORD: ${{ secrets.DOCKERHUB_PASSWORD }}
+    needs: test

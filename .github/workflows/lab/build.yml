@@ -1,0 +1,36 @@
+name: Build for sample-container-todo-app-java-maven for lab
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  workflow_dispatch:
+  workflow_call:
+    secrets:
+      THUNDRA_LAB_APIKEY:
+        required: true
+env:
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
+jobs:
+  build:
+    strategy:
+      matrix:
+        os: [ ubuntu-latest, windows-latest, macos-latest ]
+        jdk: [ 8, 11, 16 ]
+    name: Build
+    runs-on: ${{ matrix.os }}
+    steps:
+      - name: Foresight Workflow Kit Action
+        uses: runforesight/foresight-workflow-kit-action@v1
+        with:
+          api_key: ${{ secrets.THUNDRA_LAB_APIKEY }}
+      - uses: actions/checkout@v2
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          java-version: ${{ matrix.jdk }}
+          distribution: 'adopt'
+          cache: 'maven'
+      - name: Build with Maven
+        run: ./mvnw clean install -DskipTests
