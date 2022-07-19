@@ -11,7 +11,7 @@ on:
       THUNDRA_APIKEY:
         required: true
 env:
-  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.us
+  WORKFLOW_TELEMETRY_BASE_URL: https://foresight.service.thundra.me
 jobs:
   build:
     strategy:
