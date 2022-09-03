@@ -10,9 +10,7 @@ on:
     secrets:
       THUNDRA_PROD_APIKEY:
         required: true
-env:
-  FORESIGHT_UPLOADER_SIGNER_URL: https://upload.service.runforesight.com
-  WORKFLOW_TELEMETRY_BASE_URL: https://api.service.runforesight.com
+
 jobs:
   test:
     strategy:

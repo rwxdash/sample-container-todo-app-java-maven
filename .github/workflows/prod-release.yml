@@ -10,8 +10,7 @@ on:
         required: true
       THUNDRA_PROD_APIKEY:
         required: true
-env:
-  WORKFLOW_TELEMETRY_BASE_URL: https://api.service.runforesight.com
+
 jobs:
   release:
     name: Publish - Docker Hub
