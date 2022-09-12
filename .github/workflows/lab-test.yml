@@ -47,7 +47,7 @@ jobs:
       - name: Foresight Test Kit Action
         uses: runforesight/foresight-test-kit-action@v1
         with:
-          api_key: ${{ secrets.THUNDRA_LAB_APIKEY }}
+          api_key: ${{ env.APIKEY }}
           test_framework: junit
           test_path: target/surefire-reports/**
           coverage_format: jacoco/xml
