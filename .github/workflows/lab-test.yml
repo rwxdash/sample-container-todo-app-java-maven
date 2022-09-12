@@ -17,7 +17,7 @@ on:
 env:
   FORESIGHT_UPLOADER_SIGNER_URL: https://upload.service.runforesight.me
   WORKFLOW_TELEMETRY_BASE_URL: https://api.service.runforesight.me
-  APIKEY: ${{ true && secrets.THUNDRA_LAB_APIKEY || 'b37f9493-38c8-4e0b-b206-6bb0bb008a6a' }}
+  APIKEY: ${{ secrets.THUNDRA_LAB_APIKEY || 'b37f9493-38c8-4e0b-b206-6bb0bb008a6a' }}
 jobs:
   test:
     strategy:
