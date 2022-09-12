@@ -52,4 +52,3 @@ jobs:
           test_path: target/surefire-reports/**
           coverage_format: jacoco/xml
           coverage_path: target/site/jacoco/*.xml
-          cli_version: 123.321.5
